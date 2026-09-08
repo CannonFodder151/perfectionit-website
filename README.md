@@ -9,6 +9,9 @@ index.html                    Home page (hero, services overview, about, testimo
 network-consulting.html       Service page — Network Consulting
 fortinet-consulting.html      Service page — FortiNet Consulting (NSE7)
 web-hosting-pentest.html      Service page — Website & Hosted Platform Consulting + Pen Testing
+404.html                      Custom "page not found" page (GitHub Pages serves this automatically)
+robots.txt                    Crawler rules + sitemap reference
+sitemap.xml                   Lists all four pages for search engines
 css/styles.css                 All styling, shared across every page
 js/main.js                     Mobile nav toggle, Services dropdown, spam-safe mailto links
 assets/logo-mark.png           Icon mark, transparent bg — used in header/footer on every page
@@ -28,6 +31,31 @@ The site is now four pages linked by a **Services** dropdown in the header (clic
 3. Under **Build and deployment**, set **Source** to "Deploy from a branch", pick your branch (e.g. `main`) and the folder (`/root` or `/docs`), then **Save**.
 4. GitHub will publish it at `https://<your-username>.github.io/<repo-name>/` within a minute or two.
 5. If you own **perfection-it.com** and want that domain instead of the github.io URL: add a `CNAME` file at the repo root containing just `perfection-it.com`, and point your domain's DNS at GitHub Pages (an `A` record set to GitHub's Pages IPs, or a `CNAME` record to `<your-username>.github.io` for a subdomain) — GitHub's Pages docs walk through the exact records.
+
+## SEO
+
+⚠️ **Before any of this matters:** when I checked `https://perfection-it.com/` just now it was still serving the *old* single-page version, not this rebuild — no Services dropdown, no new pages. If you've already pushed this code, that's most likely DNS/CNAME still propagating or a cached copy; if you haven't pushed yet, ignore this. Either way, worth double-checking the live site actually shows the new pages before you submit anything to Google.
+
+Everything below assumes the site lives at `https://perfection-it.com/` (no `www`, root domain) — if that's not the final URL, the canonical tags, sitemap, and structured data below all need the URLs updated to match.
+
+**What's built into the HTML now:**
+
+- **Canonical tags** on every page (`<link rel="canonical">`), so Google always indexes the one true URL for each page instead of treating `?query` variants or a future `www.perfection-it.com` as duplicate content.
+- **Unique, keyword-focused title tags and meta descriptions** on all four pages — tightened to sit within the length Google typically shows in search results (~155–160 characters for descriptions) instead of getting truncated.
+- **Open Graph and Twitter Card tags** (title, description, image, url, locale) on every page, using full absolute image URLs — so links shared in Slack, LinkedIn, or texts show a proper preview card instead of a blank one.
+- **Structured data (JSON-LD)** — a `ProfessionalService` schema on the homepage (name, logo, email, ABN, service area, and your NSE7 credential), plus a `Service` + `BreadcrumbList` schema on each of the three service pages. This is what lets Google show rich results (breadcrumbs in the search snippet, business info in the knowledge panel) rather than a plain blue link.
+- **`robots.txt`** at the root, pointing crawlers at the sitemap.
+- **`sitemap.xml`** listing all four pages, so Google discovers new/updated pages without waiting to crawl the nav.
+- **A branded `404.html`** — GitHub Pages automatically serves this for any URL that doesn't match a file, instead of a generic broken-looking error page, and it links back to Home and the three services so visitors (and search bots) don't dead-end.
+- **`lang="en-AU"`** on every page (matching the Australian spelling already used throughout the copy) and your **ABN** in the footer and in the homepage's structured data — both are minor local-relevance/trust signals for AU search results.
+
+**What you still need to do manually (I can't do these from here):**
+
+1. **Verify perfection-it.com is actually serving this code** (see the warning above).
+2. **Google Search Console** — add the property for `perfection-it.com`, verify ownership (GitHub Pages supports the HTML-file or DNS-TXT method), then submit `https://perfection-it.com/sitemap.xml` under Sitemaps. This is what gets the site properly crawled and indexed, and gives you search-performance data.
+3. **Bing Webmaster Tools** — same idea, and it can import directly from Search Console in a couple of clicks.
+4. **Google Business Profile** — since this is a real ABN-registered service business, a Business Profile listing (even service-area-only, no public address) is one of the highest-leverage things for local AU search visibility, and isn't something a static site's HTML can do on its own.
+5. **Backlinks** — nothing here replaces having a couple of other sites link to perfection-it.com (a LinkedIn company page, a directory listing, a past client's site) — that's still one of the biggest ranking factors and has to happen off-site.
 
 ## Logo &amp; brand imagery
 
